@@ -1,0 +1,38 @@
+package view
+
+import (
+    "site/view/layout"
+    "site/model"
+)
+
+templ ArticleForm(article *model.Article) {
+    @layout.Base() {
+        <form action={ templ.SafeURL(formAction(article)) } method="POST">
+            <div>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" value={ article.Title } required/>
+            </div>
+            <div>
+                <label for="body">Body:</label>
+                <textarea id="body" name="body" required>{ article.Body }</textarea>
+            </div>
+            <button type="submit">
+                { buttonText(article) }
+            </button>
+        </form>
+    }
+}
+
+func formAction(article *model.Article) string {
+    if article.IsNew() {
+        return "/articles"
+    }
+    return "/articles/" + article.Id
+}
+
+func buttonText(article *model.Article) string {
+    if article.IsNew() {
+        return "Create"
+    }
+    return "Update"
+}

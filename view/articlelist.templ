@@ -1,0 +1,16 @@
+package view
+
+import (
+    "site/view/layout"
+    "site/model"
+)
+
+templ ArticleList(articles []model.Article) {
+    @layout.Base() {
+        <ul>
+            for _, article := range articles {
+                <li><a href={templ.SafeURL("/articles/" + article.Id)}>{ article.Title }</a></li>
+            }
+        </ul>
+    }
+}

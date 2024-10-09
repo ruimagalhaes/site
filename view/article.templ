@@ -1,0 +1,17 @@
+package view
+
+import (
+    "site/view/layout"
+    "site/model"
+)
+
+templ Article(article model.Article) {
+    @layout.Base() {
+        <h3>{ article.Title }</h3>
+        <div>
+            { article.Body }
+        </div>
+        <a href={templ.SafeURL("/articles/" + article.Id + "/edit")}>Edit</a>
+        <a href={templ.SafeURL("/articles/" + article.Id + "/delete")}>Delete</a>
+    }
+}
