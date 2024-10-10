@@ -11,7 +11,7 @@ templ Article(article model.Article) {
         <div>
             { article.Body }
         </div>
-        <a href={templ.SafeURL("/articles/" + article.Id + "/edit")}>Edit</a>
-        <a href={templ.SafeURL("/articles/" + article.Id + "/delete")}>Delete</a>
+        <a href={templ.SafeURL("/articles/" + article.GetStrId() + "/edit")}>Edit</a>
+        <a href={templ.SafeURL("/articles/" + article.GetStrId() + "/delete")}>Delete</a>
     }
 }

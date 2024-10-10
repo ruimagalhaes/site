@@ -112,7 +112,7 @@ func formAction(article *model.Article) string {
 	if article.IsNew() {
 		return "/articles"
 	}
-	return "/articles/" + article.Id
+	return "/articles/" + article.GetStrId()
 }
 
 func buttonText(article *model.Article) string {

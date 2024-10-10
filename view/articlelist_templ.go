@@ -55,7 +55,7 @@ func ArticleList(articles []model.Article) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var3 templ.SafeURL = templ.SafeURL("/articles/" + article.Id)
+				var templ_7745c5c3_Var3 templ.SafeURL = templ.SafeURL("/articles/" + article.GetStrId())
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var3)))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -67,7 +67,7 @@ func ArticleList(articles []model.Article) templ.Component {
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(article.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/articlelist.templ`, Line: 12, Col: 86}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/articlelist.templ`, Line: 12, Col: 94}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {

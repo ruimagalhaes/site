@@ -1,82 +1,129 @@
 package model
 
 import (
-	"errors"
+	"database/sql"
 	"fmt"
-	"math/rand"
-	"time"
+	"log"
+	"os"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
+var db *sql.DB
+
 type Article struct {
-	Id    string
+	Id    int64
 	Title string
 	Body  string
 }
 
-var mockedArticles = []Article{
-	{
-		Id:    "1",
-		Title: "First Article",
-		Body:  "This is the content of the first article.",
-	},
-	{
-		Id:    "2",
-		Title: "Second Article",
-		Body:  "Content for the second article goes here.",
-	},
-	{
-		Id:    "3",
-		Title: "Third Article",
-		Body:  "And here's the content for the third article.",
-	},
-}
+func StartDB() {
+	// cfg := mysql.Config{
+	// 	User:   os.Getenv("DBUSER"),
+	// 	Passwd: os.Getenv("DBPASS"),
+	// 	Net:    "tcp",
+	// 	Addr:   "127.0.0.1:3306",
+	// 	DBName: "site",
+	// }
+	// Get a database handle.
+	var err error
 
-func GetArticles() []Article {
-	return mockedArticles
-}
-
-func CreateArticle(title, body string) Article {
-	source := rand.NewSource(time.Now().UnixNano())
-	r := rand.New(source)
-	article := Article{
-		Id:    fmt.Sprintf("%d", r.Intn(10000)),
-		Title: title,
-		Body:  body,
+	// db, err = sql.Open("mysql", cfg.FormatDSN())
+	// db, err := sql.Open("mysql", "user:password@/dbname")
+	db, err = sql.Open("mysql", os.Getenv("DBUSER")+":"+os.Getenv("DBPASS")+"@/site")
+	if err != nil {
+		log.Fatal(err)
 	}
-	mockedArticles = append(mockedArticles, article)
-	return article
+
+	pingErr := db.Ping()
+	if pingErr != nil {
+		log.Fatal(pingErr)
+	}
+
+	fmt.Println("Connected to the database!")
 }
 
-func GetArticle(id string) (Article, error) {
-	for _, article := range mockedArticles {
-		if article.Id == id {
-			return article, nil
+func GetArticles() ([]Article, error) {
+	// An albums slice to hold data from returned rows.
+	var articles []Article
+
+	rows, err := db.Query("SELECT * FROM article")
+	if err != nil {
+		return nil, fmt.Errorf("articles: %v", err)
+	}
+	defer rows.Close()
+	// Loop through rows, using Scan to assign column data to struct fields.
+	for rows.Next() {
+		var a Article
+		if err := rows.Scan(&a.Id, &a.Title, &a.Body); err != nil {
+			return nil, fmt.Errorf("articles: %v", err)
 		}
+		articles = append(articles, a)
 	}
-	return Article{}, errors.New("article not found")
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("articles: %v", err)
+	}
+	return articles, nil
 }
 
-func UpdateArticle(id, title, body string) (Article, error) {
-	for i, article := range mockedArticles {
-		if article.Id == id {
-			mockedArticles[i].Title = title
-			mockedArticles[i].Body = body
-			return mockedArticles[i], nil
-		}
+func CreateArticle(title, body string) (int64, error) {
+	result, err := db.Exec("INSERT INTO article (title, body) VALUES (?, ?)", title, body)
+	if err != nil {
+		return 0, fmt.Errorf("addAlbum: %v", err)
 	}
-	return Article{}, errors.New("article not found")
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("addAlbum: %v", err)
+	}
+	return id, nil
 }
 
-func DeleteArticle(id string) error {
-	for i, article := range mockedArticles {
-		if article.Id == id {
-			mockedArticles = append(mockedArticles[:i], mockedArticles[i+1:]...)
-			return nil
+func GetArticle(id int64) (Article, error) {
+	var a Article
+	row := db.QueryRow("SELECT * FROM article WHERE id = ?", id)
+	if err := row.Scan(&a.Id, &a.Title, &a.Body); err != nil {
+		if err == sql.ErrNoRows {
+			return a, fmt.Errorf("articlesById %d: no such article", id)
 		}
+		return a, fmt.Errorf("articlesById %d: %v", id, err)
 	}
-	return errors.New("article not found")
+	return a, nil
+}
+
+func UpdateArticle(id int64, title, body string) (int64, error) {
+	result, err := db.Exec("UPDATE article SET title = ?, body = ? WHERE id = ?", title, body, id)
+	if err != nil {
+		return 0, fmt.Errorf("updateArticle %d: %v", id, err)
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("updateArticle %d: %v", id, err)
+	}
+	if rowsAffected == 0 {
+		return 0, fmt.Errorf("updateArticle %d: no such article", id)
+	}
+	return id, nil
+}
+
+func DeleteArticle(id int64) error {
+	result, err := db.Exec("DELETE FROM article WHERE id = ?", id)
+	if err != nil {
+		return fmt.Errorf("deleteArticle %d: %v", id, err)
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("deleteArticle %d: %v", id, err)
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("deleteArticle %d: no such article", id)
+	}
+	return nil
 }
 
 func (a *Article) IsNew() bool {
-	return a.Id == ""
+	return a.Id == 0
+}
+
+func (a *Article) GetStrId() string {
+	return fmt.Sprintf("%d", a.Id)
 }
