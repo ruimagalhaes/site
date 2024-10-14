@@ -63,7 +63,7 @@ func startDB() (*sql.DB, error) {
 	// db, err = sql.Open("mysql", cfg.FormatDSN())
 	// db, err := sql.Open("mysql", "user:password@/dbname")
 	var db *sql.DB
-	db, err = sql.Open("mysql", os.Getenv("DBUSER")+":"+os.Getenv("DBPASS")+"@/site")
+	db, err = sql.Open("mysql", os.Getenv("DBUSER")+":"+os.Getenv("DBPASS")+"@/site?parseTime=true")
 	if err != nil {
 		return nil, err
 	}

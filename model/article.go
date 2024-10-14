@@ -3,26 +3,28 @@ package model
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type Article struct {
-	Id    int64
-	Title string
-	Body  string
+	Id        int64
+	Title     string
+	Body      string
+	CreatedAt time.Time
 }
 
 func GetArticles(db *sql.DB) ([]Article, error) {
 	var articles []Article
-	rows, err := db.Query("SELECT * FROM article")
+	rows, err := db.Query("SELECT * FROM article ORDER BY created_at DESC")
 	if err != nil {
 		return nil, fmt.Errorf("articles: %v", err)
 	}
 	defer rows.Close()
 	for rows.Next() {
 		var a Article
-		if err := rows.Scan(&a.Id, &a.Title, &a.Body); err != nil {
+		if err := rows.Scan(&a.Id, &a.Title, &a.Body, &a.CreatedAt); err != nil {
 			return nil, fmt.Errorf("articles: %v", err)
 		}
 		articles = append(articles, a)
@@ -48,7 +50,7 @@ func CreateArticle(db *sql.DB, title, body string) (int64, error) {
 func GetArticle(db *sql.DB, id int64) (Article, error) {
 	var a Article
 	row := db.QueryRow("SELECT * FROM article WHERE id = ?", id)
-	if err := row.Scan(&a.Id, &a.Title, &a.Body); err != nil {
+	if err := row.Scan(&a.Id, &a.Title, &a.Body, &a.CreatedAt); err != nil {
 		if err == sql.ErrNoRows {
 			return a, fmt.Errorf("articlesById %d: no such article", id)
 		}
