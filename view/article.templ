@@ -5,13 +5,15 @@ import (
     "site/model"
 )
 
-templ Article(article model.Article) {
+templ Article(article model.Article, isLogged bool) {
     @layout.Base() {
         <h3>{ article.Title }</h3>
-        <div>
-            { article.Body }
+        <div style="white-space: pre-wrap;">
+            <p>{ article.Body }</p>
         </div>
-        <a href={templ.SafeURL("/articles/" + article.GetStrId() + "/edit")}>Edit</a>
-        <a href={templ.SafeURL("/articles/" + article.GetStrId() + "/delete")}>Delete</a>
+        if isLogged {
+            <a href={templ.SafeURL("/articles/" + article.GetStrId() + "/edit")}>Edit</a>
+            <a href={templ.SafeURL("/articles/" + article.GetStrId() + "/delete")}>Delete</a>
+        }
     }
 }

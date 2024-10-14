@@ -3,13 +3,9 @@ package model
 import (
 	"database/sql"
 	"fmt"
-	"log"
-	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 )
-
-var db *sql.DB
 
 type Article struct {
 	Id    int64
@@ -17,42 +13,13 @@ type Article struct {
 	Body  string
 }
 
-func StartDB() {
-	// cfg := mysql.Config{
-	// 	User:   os.Getenv("DBUSER"),
-	// 	Passwd: os.Getenv("DBPASS"),
-	// 	Net:    "tcp",
-	// 	Addr:   "127.0.0.1:3306",
-	// 	DBName: "site",
-	// }
-	// Get a database handle.
-	var err error
-
-	// db, err = sql.Open("mysql", cfg.FormatDSN())
-	// db, err := sql.Open("mysql", "user:password@/dbname")
-	db, err = sql.Open("mysql", os.Getenv("DBUSER")+":"+os.Getenv("DBPASS")+"@/site")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	pingErr := db.Ping()
-	if pingErr != nil {
-		log.Fatal(pingErr)
-	}
-
-	fmt.Println("Connected to the database!")
-}
-
-func GetArticles() ([]Article, error) {
-	// An albums slice to hold data from returned rows.
+func GetArticles(db *sql.DB) ([]Article, error) {
 	var articles []Article
-
 	rows, err := db.Query("SELECT * FROM article")
 	if err != nil {
 		return nil, fmt.Errorf("articles: %v", err)
 	}
 	defer rows.Close()
-	// Loop through rows, using Scan to assign column data to struct fields.
 	for rows.Next() {
 		var a Article
 		if err := rows.Scan(&a.Id, &a.Title, &a.Body); err != nil {
@@ -66,7 +33,7 @@ func GetArticles() ([]Article, error) {
 	return articles, nil
 }
 
-func CreateArticle(title, body string) (int64, error) {
+func CreateArticle(db *sql.DB, title, body string) (int64, error) {
 	result, err := db.Exec("INSERT INTO article (title, body) VALUES (?, ?)", title, body)
 	if err != nil {
 		return 0, fmt.Errorf("addAlbum: %v", err)
@@ -78,7 +45,7 @@ func CreateArticle(title, body string) (int64, error) {
 	return id, nil
 }
 
-func GetArticle(id int64) (Article, error) {
+func GetArticle(db *sql.DB, id int64) (Article, error) {
 	var a Article
 	row := db.QueryRow("SELECT * FROM article WHERE id = ?", id)
 	if err := row.Scan(&a.Id, &a.Title, &a.Body); err != nil {
@@ -90,7 +57,7 @@ func GetArticle(id int64) (Article, error) {
 	return a, nil
 }
 
-func UpdateArticle(id int64, title, body string) (int64, error) {
+func UpdateArticle(db *sql.DB, id int64, title, body string) (int64, error) {
 	result, err := db.Exec("UPDATE article SET title = ?, body = ? WHERE id = ?", title, body, id)
 	if err != nil {
 		return 0, fmt.Errorf("updateArticle %d: %v", id, err)
@@ -105,7 +72,7 @@ func UpdateArticle(id int64, title, body string) (int64, error) {
 	return id, nil
 }
 
-func DeleteArticle(id int64) error {
+func DeleteArticle(db *sql.DB, id int64) error {
 	result, err := db.Exec("DELETE FROM article WHERE id = ?", id)
 	if err != nil {
 		return fmt.Errorf("deleteArticle %d: %v", id, err)

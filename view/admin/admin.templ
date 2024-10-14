@@ -1,0 +1,22 @@
+package view
+
+import (
+    "site/view/layout"
+)
+
+templ Admin() {
+    @layout.Base() {
+        <a href="/articles/new">New</a>
+        <form action={ templ.SafeURL("logout") } method="POST">
+            <button type="submit">
+                Logout
+            </button>
+        </form>
+    }
+}
+
+
+
+
+
+
