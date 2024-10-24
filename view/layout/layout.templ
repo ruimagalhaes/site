@@ -5,12 +5,36 @@ templ Base() {
         <head>
             <meta charset="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <script src="https://unpkg.com/htmx.org@2.0.3/dist/htmx.js"></script>
+            <link rel="stylesheet" href="/static/css/style.css">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            // <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
             <title></title>
         </head>
         <body>
-            <a href="/">Home</a>
-            { children...}
+            <div class="mondrian-container">
+                <div class="block cyan1"></div>
+                <div class="block white1"></div>
+                <div class="block yellow1"></div>
+                <div class="block cyan2"></div>
+                <div class="block yellow2"></div>
+                <div class="block cyan3"></div>
+                <div class="block white3"></div>
+                <div class="block white4"></div>
+                <div class="block white5"></div>
+                <div class="block blue">
+                    Poems from Rui S. Magalhães, written in portuguese. Photos on Instagram, code on Github. Book
+                </div>
+                <div class="block red2"></div>
+                <div class="block yellow3"></div>
+                <div class="block white6"></div>
+                <div class="block black2"></div>
+                <div class="block white7">
+                    This website looks like a Piet Mondrian paiting and that is because my friend José loves him. 
+                </div>
+                { children...}
+            </div>
         </body>
     </html>
 }

@@ -7,10 +7,17 @@ import (
 
 templ ArticleList(articles []model.Article) {
     @layout.Base() {
-        <ul>
-            for _, article := range articles {
-                <li><a href={templ.SafeURL("/articles/" + article.GetStrId())}>{ article.Title }</a></li>
-            }
-        </ul>
+        <div class="block red1">
+            <ul>
+                for _, article := range articles {
+                    <li><a href={templ.SafeURL("/articles/" + article.GetStrId())}>{ article.Title }</a></li>
+                }
+            </ul>
+        </div>
+        <div class="block white2"></div>
+        <div class="block black1"></div>
+        <div class="block cyan4"></div>
+        <div class="block cyan5"></div>
+        
     }
 }

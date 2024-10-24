@@ -5,18 +5,18 @@ import (
 )
 
 templ Admin() {
+
     @layout.Base() {
-        <a href="/articles/new">New</a>
-        <form action={ templ.SafeURL("logout") } method="POST">
-            <button type="submit">
-                Logout
-            </button>
-        </form>
+        <div class="block white8">
+            <a href="/articles/new">New</a>
+            <form action={ templ.SafeURL("logout") } method="POST">
+                <button type="submit">
+                    Logout
+                </button>
+            </form>
+        </div>
+        <div class="block red3">
+            <a href={templ.SafeURL("/")}>&larr;</a>
+        </div>
     }
 }
-
-
-
-
-
-

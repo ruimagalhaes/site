@@ -25,6 +25,7 @@ func main() {
 	session.Options.SameSite = http.SameSiteLaxMode
 
 	e := echo.New()
+	e.Static("/static", "./static")
 	e.Use(middleware.Logger())
 	e.Use(sessionMiddleware(session))
 	e.Use(databaseMiddleware(database))

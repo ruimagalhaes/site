@@ -29,7 +29,7 @@ func Base() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><script src=\"https://unpkg.com/htmx.org@2.0.3/dist/htmx.js\"></script><title></title></head><body><a href=\"/\">Home</a>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link rel=\"stylesheet\" href=\"/static/css/style.css\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&amp;family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&amp;display=swap\" rel=\"stylesheet\"><title></title></head><body><div class=\"mondrian-container\"><div class=\"block cyan1\"></div><div class=\"block white1\"></div><div class=\"block yellow1\"></div><div class=\"block cyan2\"></div><div class=\"block yellow2\"></div><div class=\"block cyan3\"></div><div class=\"block white3\"></div><div class=\"block white4\"></div><div class=\"block white5\"></div><div class=\"block blue\">Poems from Rui S. Magalhães, written in portuguese. Photos on Instagram, code on Github. Book</div><div class=\"block red2\"></div><div class=\"block yellow3\"></div><div class=\"block white6\"></div><div class=\"block black2\"></div><div class=\"block white7\">This website looks like a Piet Mondrian paiting and that is because my friend José loves him. </div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -37,7 +37,7 @@ func Base() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

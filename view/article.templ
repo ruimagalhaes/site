@@ -7,13 +7,15 @@ import (
 
 templ Article(article model.Article, isLogged bool) {
     @layout.Base() {
-        <h3>{ article.Title }</h3>
-        <div style="white-space: pre-wrap;">
-            <p>{ article.Body }</p>
+        <div class="block white8">
+            { article.Body }
+            if isLogged {
+                <a href={templ.SafeURL("/articles/" + article.GetStrId() + "/edit")}>Edit</a>
+                <a href={templ.SafeURL("/articles/" + article.GetStrId() + "/delete")}>Delete</a>
+            }
         </div>
-        if isLogged {
-            <a href={templ.SafeURL("/articles/" + article.GetStrId() + "/edit")}>Edit</a>
-            <a href={templ.SafeURL("/articles/" + article.GetStrId() + "/delete")}>Delete</a>
-        }
+        <div class="block red3">
+            <a href={templ.SafeURL("/")}>&larr;</a>
+        </div>
     }
 }
