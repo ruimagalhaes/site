@@ -51,20 +51,10 @@ func main() {
 }
 
 func startDB() (*sql.DB, error) {
-	// cfg := mysql.Config{
-	// 	User:   os.Getenv("DBUSER"),
-	// 	Passwd: os.Getenv("DBPASS"),
-	// 	Net:    "tcp",
-	// 	Addr:   "127.0.0.1:3306",
-	// 	DBName: "site",
-	// }
-	// Get a database handle.
 	var err error
 
-	// db, err = sql.Open("mysql", cfg.FormatDSN())
-	// db, err := sql.Open("mysql", "user:password@/dbname")
 	var db *sql.DB
-	db, err = sql.Open("mysql", os.Getenv("DBUSER")+":"+os.Getenv("DBPASS")+"@/site?parseTime=true")
+	db, err = sql.Open("mysql", os.Getenv("DBUSER")+":"+os.Getenv("DBPASS")+"@/"+os.Getenv("DBNAME")+"?parseTime=true")
 	if err != nil {
 		return nil, err
 	}
