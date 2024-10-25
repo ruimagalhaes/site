@@ -8,7 +8,7 @@ import (
 templ ArticleList(articles []model.Article) {
     @layout.Base() {
         <div class="block red1">
-            <ul>
+            <ul class="article-list">
                 for _, article := range articles {
                     <li><a href={templ.SafeURL("/articles/" + article.GetStrId())}>{ article.Title }</a></li>
                 }
